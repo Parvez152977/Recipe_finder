@@ -360,10 +360,10 @@ Recipe_finder/
 
 | Feature        | Preview                                                      |
 | -------------- | ------------------------------------------------------------ |
-| Home Page      | ![](https://via.placeholder.com/800x450?text=Home+Page)      |
-| Search Results | ![](https://via.placeholder.com/800x450?text=Search+Results) |
-| Recipe Details | ![](https://via.placeholder.com/800x450?text=Recipe+Details) |
-| Favorites      | ![](https://via.placeholder.com/800x450?text=Favorites)      |
+| Home Page      | ![](frontend/public/HomePage.png)      |
+| Search Results | ![](frontend/public/SearchResult.png) |
+| Recipe Details | ![](frontend/public/RecipeDetail.png) |
+| Favorites      | ![](frontend/public/Favorites.png)      |
 
 ---
 
