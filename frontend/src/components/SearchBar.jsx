@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch, loading }) => {
   const [query, setQuery] = useState('');
 
   const handleSubmit = (e) => {
@@ -11,14 +11,31 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="search-section">
       <input
         type="text"
-        placeholder="Search recipes..."
+        className="search-input"
+        placeholder="Search for recipes... (e.g., pizza, pasta, chicken)"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        disabled={loading}
       />
-      <button type="submit">Search</button>
+      <button 
+        type="submit" 
+        disabled={loading}
+        style={{
+          marginTop: '10px',
+          padding: '12px 30px',
+          background: '#667eea',
+          color: 'white',
+          border: 'none',
+          borderRadius: '25px',
+          cursor: 'pointer',
+          fontSize: '16px'
+        }}
+      >
+        {loading ? 'Searching...' : '🔍 Search'}
+      </button>
     </form>
   );
 };

@@ -2,21 +2,16 @@ import { useState, useEffect } from 'react';
 import RecipeCard from '../components/RecipeCard';
 import SearchBar from '../components/SearchBar';
 import Filters from '../components/Filters';
-import RecipeDetail from '../components/RecipeDetail';  // ADD THIS IMPORT
-import { searchRecipes, getRandomRecipes, getRecipeDetails } from '../services/api';
+import { searchRecipes, getRandomRecipes } from '../services/api';
 
 const Home = ({ userId }) => {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedRecipe, setSelectedRecipe] = useState(null);  // ADD THIS
-  const [currentQuery, setCurrentQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
 
-  useEffect(() => {
-    loadRandomRecipes();
-  }, []);
-
+  // Define loadRandomRecipes FIRST
   const loadRandomRecipes = async () => {
     setLoading(true);
     setError(null);
@@ -34,16 +29,22 @@ const Home = ({ userId }) => {
     }
   };
 
-  const handleSearch = async (query) => {
+  // Define performSearch SECOND (before it's used)
+  const performSearch = async (query, filterParams = {}) => {
+    if (!query.trim()) {
+      loadRandomRecipes();
+      return;
+    }
+    
     setLoading(true);
     setError(null);
-    setCurrentQuery(query);
     try {
-      const data = await searchRecipes(query, filters);
+      const data = await searchRecipes(query, filterParams);
       if (data.success) {
         setRecipes(data.results);
       } else {
         setError(data.error || 'No recipes found');
+        setRecipes([]);
       }
     } catch (err) {
       setError('Failed to search recipes');
@@ -52,45 +53,38 @@ const Home = ({ userId }) => {
     }
   };
 
+  // Define handleSearch THIRD
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    performSearch(query, filters);
+  };
+
+  // Define handleFilterChange FOURTH
   const handleFilterChange = (key, value) => {
     if (key === 'reset') {
       setFilters({});
-      if (currentQuery) {
-        handleSearch(currentQuery);
+      if (searchQuery) {
+        performSearch(searchQuery, {});
       } else {
         loadRandomRecipes();
       }
     } else {
       const newFilters = { ...filters, [key]: value };
       setFilters(newFilters);
-      if (currentQuery) {
-        handleSearch(currentQuery);
+      if (searchQuery) {
+        performSearch(searchQuery, newFilters);
       }
     }
   };
 
-  // REPLACE the alert with this function
-  const handleRecipeClick = async (id) => {
-    setLoading(true);
-    try {
-      const data = await getRecipeDetails(id);
-      if (data.success) {
-        setSelectedRecipe(data.recipe);
-      } else {
-        alert('Failed to load recipe details');
-      }
-    } catch (err) {
-      alert('Error loading recipe details');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Load random recipes on mount
+  useEffect(() => {
+    loadRandomRecipes();
+  }, []);
 
-  const handleCloseModal = () => {
-    setSelectedRecipe(null);
-  };
-
-  if (loading && !selectedRecipe) return <div className="loading">Loading...</div>;
+  if (loading && recipes.length === 0) {
+    return <div className="loading">Loading delicious recipes...</div>;
+  }
 
   return (
     <div className="container">
@@ -98,8 +92,9 @@ const Home = ({ userId }) => {
         <h1>🍳 Recipe Finder</h1>
         <p>Discover delicious recipes from around the world</p>
       </div>
-      
+
       <SearchBar onSearch={handleSearch} loading={loading} />
+      
       <Filters filters={filters} onFilterChange={handleFilterChange} />
 
       {error && (
@@ -109,31 +104,24 @@ const Home = ({ userId }) => {
         </div>
       )}
 
-      {loading && <div className="loading">Loading delicious recipes...</div>}
-
       {!loading && !error && (
         <div className="recipes-grid">
           {recipes.map((recipe) => (
             <RecipeCard 
               key={recipe.id} 
               recipe={recipe} 
-              onClick={handleRecipeClick}
               userId={userId}
             />
           ))}
         </div>
       )}
 
-      {!loading && !error && recipes.length === 0 && (
-        <div className="loading">No recipes found. Try searching for something else!</div>
+      {!loading && !error && recipes.length === 0 && searchQuery && (
+        <div className="loading">No recipes found for "{searchQuery}". Try something else!</div>
       )}
 
-      {/* ADD THE MODAL */}
-      {selectedRecipe && (
-        <RecipeDetail 
-          recipe={selectedRecipe} 
-          onClose={handleCloseModal}
-        />
+      {!loading && !error && recipes.length === 0 && !searchQuery && (
+        <div className="loading">No recipes available. Please try searching!</div>
       )}
     </div>
   );
