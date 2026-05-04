@@ -1,0 +1,44 @@
+.filters-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+}
+
+.filter-select {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+    transition: transform 0.2s ease;
+}
+
+.filter-select:hover {
+    transform: scale(1.02);
+}
+
+.clear-btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    background: #ff6b6b;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+    transition: transform 0.2s ease;
+}
+
+.clear-btn:hover {
+    transform: scale(1.05);
+    background: #ff5252;
+}

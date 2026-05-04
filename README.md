@@ -28,7 +28,7 @@ A simple full-stack web app to search recipes, view details, and save favorites.
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/recipe-finder.git
+git clone https://github.com/Parvez152977/recipe-finder.git
 cd recipe-finder
 ```
 
