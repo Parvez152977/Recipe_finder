@@ -70,7 +70,7 @@ body {
     background: var(--gradient);
     -webkit-background-clip: text;
     background-clip: text;
-    color: floralwhite;
+    color: rgb(50, 15, 206);
     text-decoration: none;
     font-family: 'Playfair Display', serif;
     transition: transform 0.3s ease;
