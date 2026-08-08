@@ -388,12 +388,6 @@ Recipe_finder/
 
 ---
 
-## 📄 License
-
-This project is for educational purposes only.
-
----
-
 ## ⭐ Support
 
 If you found this helpful, consider giving it a ⭐ on GitHub.
